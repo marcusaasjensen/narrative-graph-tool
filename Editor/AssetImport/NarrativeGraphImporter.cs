@@ -35,7 +35,8 @@ namespace NarrativeGraphTool.Editor.AssetImport
             // Parse runtime data first so it can be the main (visible) asset.
             var runtimeData = NarrativeGraphParser.Parse(graph);
             runtimeData.name = Path.GetFileNameWithoutExtension(ctx.assetPath);
-            ctx.AddObjectToAsset("RuntimeData", runtimeData);
+            var icon = Resources.Load<Texture2D>("Icons/narrative-graph-icon");
+            ctx.AddObjectToAsset("RuntimeData", runtimeData, icon);
             ctx.SetMainObject(runtimeData);
 
             // Hide the internal Graph Toolkit objects — they must stay in the file so

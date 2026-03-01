@@ -10,6 +10,7 @@ namespace NarrativeGraphTool.Runtime.Data
     /// file by <c>NarrativeGraphPostprocessor</c> whenever the graph is saved.
     /// Assign to a <see cref="NarrativeRunner"/> to play the narrative at runtime.
     /// </summary>
+    [Icon("Packages/com.marcusaasjensen.narrativegraphtool/Editor/Icons/narrative-graph-icon.png")]
     public class NarrativeGraphData : ScriptableObject
     {
         /// <summary>ID of the StartNodeData — the first node executed by NarrativeRunner.</summary>
