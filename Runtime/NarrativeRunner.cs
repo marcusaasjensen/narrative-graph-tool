@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NarrativeGraphTool.Runtime.Data;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace NarrativeGraphTool.Runtime
 {
@@ -41,6 +42,16 @@ namespace NarrativeGraphTool.Runtime
 
         [Tooltip("The parsed narrative graph data asset to execute.")]
         [SerializeField] NarrativeGraphData _graphData;
+
+        [Header("Unity Events")]
+        [Tooltip("Raised when execution enters any node. Supports dynamic NarrativeNodeData parameter or no parameter.")]
+        [SerializeField] UnityEvent<NarrativeNodeData> _onNodeEnter;
+
+        [Tooltip("Raised when execution exits any node. Supports dynamic NarrativeNodeData parameter or no parameter.")]
+        [SerializeField] UnityEvent<NarrativeNodeData> _onNodeExit;
+
+        [Tooltip("Raised when the narrative ends. Inspector-wirable equivalent of OnEnd.")]
+        [SerializeField] UnityEvent _onNarrativeEnd;
 
         // ─── State ────────────────────────────────────────────────────────────────
 
@@ -177,7 +188,9 @@ namespace NarrativeGraphTool.Runtime
 
             if (_current == null) return;
 
-            Step(GetLinearNextId(_current));
+            var exiting = _current;
+            _onNodeExit.Invoke(exiting);
+            Step(GetLinearNextId(exiting));
         }
 
         /// <summary>
@@ -206,6 +219,7 @@ namespace NarrativeGraphTool.Runtime
             }
 
             _awaitingChoice = false;
+            _onNodeExit.Invoke(_current);
             Step(_visibleOptions[index].nextId);
         }
 
@@ -232,6 +246,8 @@ namespace NarrativeGraphTool.Runtime
             // Capture visited state BEFORE marking so first-visit reads false on initial pass.
             bool wasVisited = _visitedNodes.Contains(node.id);
             _visitedNodes.Add(node.id);
+
+            _onNodeEnter.Invoke(node);
 
             switch (node)
             {
@@ -278,19 +294,23 @@ namespace NarrativeGraphTool.Runtime
                     if (randomBranch.branchIds.Count == 0)
                     {
                         Debug.LogWarning("[NarrativeRunner] RandomBranchNode has no branches. Ending narrative.", this);
+                        _onNodeExit.Invoke(node);
                         Finish();
                         return;
                     }
+                    _onNodeExit.Invoke(node);
                     Step(randomBranch.branchIds[UnityEngine.Random.Range(0, randomBranch.branchIds.Count)]);
                     break;
 
                 case SetVariableNodeData setVar:
                     ApplySetVariable(setVar);
+                    _onNodeExit.Invoke(node);
                     Step(setVar.nextId);
                     break;
 
                 case EventNodeData ev:
                     OnEvent?.Invoke(ev);
+                    _onNodeExit.Invoke(node);
                     Step(ev.nextId);
                     break;
 
@@ -299,27 +319,33 @@ namespace NarrativeGraphTool.Runtime
                     if (target == null)
                     {
                         Debug.LogError($"[NarrativeRunner] Jump target '{jump.targetLabel}' not found.", this);
+                        _onNodeExit.Invoke(node);
                         Finish();
                         return;
                     }
+                    _onNodeExit.Invoke(node);
                     Step(target.nextId);
                     break;
 
                 case TargetNodeData targetNode:
                     // Labels are transparent — pass straight through.
+                    _onNodeExit.Invoke(node);
                     Step(targetNode.nextId);
                     break;
 
                 case ConditionalNodeData conditional:
+                    _onNodeExit.Invoke(node);
                     Step(EvaluateConditional(conditional) ? conditional.trueId : conditional.falseId);
                     break;
 
                 case EndNodeData:
+                    _onNodeExit.Invoke(node);
                     Finish();
                     break;
 
                 default:
                     Debug.LogWarning($"[NarrativeRunner] Unhandled node type '{node.GetType().Name}'. Stopping.", this);
+                    _onNodeExit.Invoke(node);
                     Finish();
                     break;
             }
@@ -501,6 +527,7 @@ namespace NarrativeGraphTool.Runtime
             _visibleOptions = null;
             _current = null;
             OnEnd?.Invoke();
+            _onNarrativeEnd.Invoke();
         }
     }
 }
