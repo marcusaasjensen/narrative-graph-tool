@@ -1,0 +1,22 @@
+{
+  "name": "com.marcusaasjensen.narrativegraphtool",
+  "displayName": "Narrative Graph Tool",
+  "version": "1.0.0",
+  "unity": "6.0",
+  "description": "A node-based editor for creating a branching narrative structure in Unity, built with Graph Tools Foundation 0.4.",
+  "keywords": [
+    "dialogue",
+    "narrative",
+    "graph",
+    "editor",
+    "story"
+  ],
+  "author": {
+    "name": "Marcus Aas Jensen",
+    "email": "aasjensen@hotmail.com",
+    "url": "https://marcusaasjensen.com"
+  },
+  "dependencies": {
+    "com.unity.graphtoolkit": "0.4.0-exp.2"
+  }
+}

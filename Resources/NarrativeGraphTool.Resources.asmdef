@@ -1,0 +1,16 @@
+{
+    "name": "NarrativeGraphTool.Resources",
+    "rootNamespace": "",
+    "references": [
+        "NarrativeGraphTool.Runtime"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

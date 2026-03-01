@@ -1,0 +1,12 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.user
+
+# Unity generated (not part of the package)
+*.csproj
+*.sln
