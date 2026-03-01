@@ -191,7 +191,9 @@ Modify a variable as the narrative flows through. Execution continues automatica
 
 ## ⚙️ NarrativeRunner API
 
-### Events
+### C# Events
+
+Subscribe from code for full typed access to node data:
 
 ```csharp
 // A single narrative line is ready to display
@@ -200,15 +202,35 @@ runner.OnLine += (NarrativeLineData line) => { };
 // A sequential block of lines is ready to display
 runner.OnBlock += (NarrativeBlockData block) => { };
 
-// A choice menu should be shown — opts contains only the visible choices
-runner.OnChoice += (List<ChoiceOption> opts) => { };
+// A choice menu should be shown — contains only the visible choices
+runner.OnChoice += (ChoiceNodeData data) => { };
 
 // An event node was reached — use name + payload for gameplay hooks
-runner.OnEvent += (string name, string payload) => { };
+runner.OnEvent += (EventNodeData ev) => { };
 
 // The narrative has ended
 runner.OnEnd += () => { };
 ```
+
+---
+
+### 🔌 Unity Events (Inspector)
+
+Every C# event has an Inspector-wirable **UnityEvent** equivalent, visible under the **Unity Events** header on the `NarrativeRunner` component. Wire up any method directly in the Inspector — no code required.
+
+| Unity Event | Equivalent C# event | Parameter |
+|---|---|---|
+| `_onLine` | `OnLine` | `NarrativeLineData` |
+| `_onBlock` | `OnBlock` | `NarrativeBlockData` |
+| `_onChoice` | `OnChoice` | `ChoiceNodeData` |
+| `_onEvent` | `OnEvent` | `EventNodeData` |
+| `_onNarrativeEnd` | `OnEnd` | — |
+| `_onNodeEnter` | — | `NarrativeNodeData` |
+| `_onNodeExit` | — | `NarrativeNodeData` |
+
+> ℹ️ `_onNodeEnter` and `_onNodeExit` fire for **every** node — useful for driving animations, audio, or analytics without caring about the specific node type. In the Inspector, select the **Dynamic** version of a method to receive the node as a parameter, or wire a no-parameter method to ignore it.
+
+---
 
 ### Controlling flow
 
@@ -219,6 +241,8 @@ runner.SelectChoice(index);       // Choose an option (0-based, filtered index)
 runner.SetGraphData(data);        // Swap graph data at runtime
 runner.ResetVisitedNodes();       // Clear visit history
 ```
+
+---
 
 ### Variables
 
@@ -234,12 +258,14 @@ runner.VariableSetter = (string id, object value) => myVariables[id] = value;
 
 > 💡 Variable IDs are plain strings you define in the graph nodes — they map to whatever storage system your game uses (Dictionary, ScriptableObjects, PlayerPrefs, etc.)
 
+---
+
 ### State
 
 ```csharp
-bool running  = runner.IsRunning;
-NarrativeNodeData current = runner.CurrentNode;
-IReadOnlyCollection<string> visited = runner.VisitedNodes;
+bool running                          = runner.IsRunning;
+NarrativeNodeData current             = runner.CurrentNode;
+IReadOnlyCollection<string> visited   = runner.VisitedNodes;
 ```
 
 ---
