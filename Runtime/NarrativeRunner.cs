@@ -44,14 +44,26 @@ namespace NarrativeGraphTool.Runtime
         [SerializeField] NarrativeGraphData _graphData;
 
         [Header("Unity Events")]
+        [Tooltip("Raised when a single narrative line is reached. Inspector-wirable equivalent of OnLine.")]
+        [SerializeField] UnityEvent<NarrativeLineData> _onLine;
+
+        [Tooltip("Raised when a block of sequential lines is reached. Inspector-wirable equivalent of OnBlock.")]
+        [SerializeField] UnityEvent<NarrativeBlockData> _onBlock;
+
+        [Tooltip("Raised when a choice menu should be shown. Inspector-wirable equivalent of OnChoice.")]
+        [SerializeField] UnityEvent<ChoiceNodeData> _onChoice;
+
+        [Tooltip("Raised when an EventNode is processed. Inspector-wirable equivalent of OnEvent.")]
+        [SerializeField] UnityEvent<EventNodeData> _onEvent;
+
+        [Tooltip("Raised when the narrative ends. Inspector-wirable equivalent of OnEnd.")]
+        [SerializeField] UnityEvent _onNarrativeEnd;
+
         [Tooltip("Raised when execution enters any node. Supports dynamic NarrativeNodeData parameter or no parameter.")]
         [SerializeField] UnityEvent<NarrativeNodeData> _onNodeEnter;
 
         [Tooltip("Raised when execution exits any node. Supports dynamic NarrativeNodeData parameter or no parameter.")]
         [SerializeField] UnityEvent<NarrativeNodeData> _onNodeExit;
-
-        [Tooltip("Raised when the narrative ends. Inspector-wirable equivalent of OnEnd.")]
-        [SerializeField] UnityEvent _onNarrativeEnd;
 
         // ─── State ────────────────────────────────────────────────────────────────
 
@@ -253,22 +265,26 @@ namespace NarrativeGraphTool.Runtime
             {
                 // ── Displayable nodes — pause and wait for Continue() ─────────────
                 case RevisitableLineData rev:
-                    OnLine?.Invoke(new NarrativeLineData
+                    var revisitedLine = new NarrativeLineData
                     {
                         id       = rev.id,
                         speaker  = rev.speaker,
                         text     = wasVisited ? rev.revisitText : rev.firstVisitText,
                         metadata = rev.metadata,
                         nextId   = rev.nextId,
-                    });
+                    };
+                    OnLine?.Invoke(revisitedLine);
+                    _onLine.Invoke(revisitedLine);
                     break;
 
                 case NarrativeLineData line:
                     OnLine?.Invoke(line);
+                    _onLine.Invoke(line);
                     break;
 
                 case NarrativeBlockData block:
                     OnBlock?.Invoke(block);
+                    _onBlock.Invoke(block);
                     break;
 
                 // ── Choice — filter visible options, pause for SelectChoice() ─────
@@ -286,7 +302,9 @@ namespace NarrativeGraphTool.Runtime
 
                     _awaitingChoice = true;
                     // Raise a view with only visible options so the UI doesn't need to filter.
-                    OnChoice?.Invoke(new ChoiceNodeData { id = choiceData.id, options = _visibleOptions });
+                    var filteredChoice = new ChoiceNodeData { id = choiceData.id, options = _visibleOptions };
+                    OnChoice?.Invoke(filteredChoice);
+                    _onChoice.Invoke(filteredChoice);
                     break;
 
                 // ── Auto-advancing nodes ──────────────────────────────────────────
@@ -310,6 +328,7 @@ namespace NarrativeGraphTool.Runtime
 
                 case EventNodeData ev:
                     OnEvent?.Invoke(ev);
+                    _onEvent.Invoke(ev);
                     _onNodeExit.Invoke(node);
                     Step(ev.nextId);
                     break;
