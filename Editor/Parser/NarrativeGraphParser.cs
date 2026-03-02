@@ -392,7 +392,15 @@ namespace NarrativeGraphTool.Editor.Parser
                 }
             }
 
-            return new ChoiceNodeData { id = id, options = options };
+            ctx.GetNodeOptionByName(ChoiceContextNode.OptionPromptText).TryGetValue<string>(out var promptText);
+            ctx.GetInputPortByName(ChoiceContextNode.PortPromptSpeaker).TryGetValue<string>(out var promptSpeaker);
+            ctx.GetNodeOptionByName(ChoiceContextNode.OptionPromptMeta).TryGetValue<NarrativeLineMetadata>(out var promptMeta);
+
+            var prompt = string.IsNullOrEmpty(promptText)
+                ? null
+                : new NarrativeLine { speaker = promptSpeaker ?? "", text = promptText, metadata = promptMeta };
+
+            return new ChoiceNodeData { id = id, prompt = prompt, options = options };
         }
 
         static RandomBranchNodeData ConvertRandomBranchNode(

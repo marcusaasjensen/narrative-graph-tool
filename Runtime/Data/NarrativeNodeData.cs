@@ -162,6 +162,14 @@ namespace NarrativeGraphTool.Runtime.Data
     [Serializable]
     public class ChoiceNodeData : NarrativeNodeData
     {
+        /// <summary>
+        /// Optional prompt line shown above the choices (speaker, text, and metadata).
+        /// When non-null the UI can display it alongside the options in the same <c>OnChoice</c> event,
+        /// removing the need for a separate NarrativeLine node wired before this node.
+        /// Null means no built-in prompt — use the wired-line pattern instead.
+        /// </summary>
+        public NarrativeLine prompt;
+
         /// <summary>All choices in the order they were defined in the graph.</summary>
         public List<ChoiceOption> options = new();
     }
