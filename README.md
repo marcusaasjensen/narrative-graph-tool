@@ -34,6 +34,8 @@ Design branching stories, dialogue, and interactive narratives visually — then
 
 ### 1. Add Graph Toolkit
 
+> ⚠️ UPM does **not** auto-install dependencies from git URL packages — you must add Graph Toolkit manually before step 2, or you will get compile errors.
+
 Open `Packages/manifest.json` and add the dependency:
 
 ```json
