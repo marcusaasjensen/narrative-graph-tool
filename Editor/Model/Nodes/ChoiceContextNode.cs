@@ -25,26 +25,26 @@ namespace NarrativeGraphTool.Editor.Model.Nodes
         protected override void OnDefineOptions(IOptionDefinitionContext context)
         {
             context.AddOption<string>(OptionPromptText)
-                .WithDisplayName("Prompt Text")
+                .WithDisplayName("Prompt")
                 .WithDefaultValue(string.Empty)
                 .WithTooltip("Optional line shown above the choices. Leave empty to wire a NarrativeLine before this node instead.")
-                .Delayed();
+                .Build();
 
             context.AddOption<NarrativeLineMetadata>(OptionPromptMeta)
-                .WithDisplayName("Prompt Metadata")
+                .WithDisplayName("Metadata")
                 .WithTooltip("Optional ScriptableObject with game-specific data (emotion, portrait, etc.) for the prompt line.")
                 .Build();
         }
 
         protected override void OnDefinePorts(IPortDefinitionContext context)
         {
+            context.AddInputPort<string>(PortPromptSpeaker)
+                .WithDisplayName("Speaker")
+                .Build();
+
             context.AddInputPort(NarrativeNodeBase.ExecutionPortName)
                 .WithDisplayName(string.Empty)
                 .WithConnectorUI(PortConnectorUI.Arrowhead)
-                .Build();
-
-            context.AddInputPort<string>(PortPromptSpeaker)
-                .WithDisplayName("Prompt Speaker")
                 .Build();
         }
     }
