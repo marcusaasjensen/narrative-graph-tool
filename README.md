@@ -1,5 +1,9 @@
 # 📖 Narrative Graph Tool
 
+<p align="center">
+  <img src="Editor/Icons/narrative-graph-icon.png" width="96" alt="Narrative Graph Tool icon"/>
+</p>
+
 A **node-based narrative editor** for Unity built on [Graph Toolkit 0.4.0-exp.2](https://docs.unity3d.com/Packages/com.unity.graphtoolkit@0.4/manual/index.html).
 Design branching stories, dialogue, and interactive narratives visually — then play them back at runtime with a simple event-driven API.
 
