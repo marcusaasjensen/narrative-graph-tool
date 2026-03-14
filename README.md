@@ -19,6 +19,7 @@ Design branching stories, dialogue, and interactive narratives visually — then
 - ⚡ Event nodes for gameplay hooks
 - 🔁 Revisitable lines with alternate text
 - 🏷️ Jump/Target anchors for non-linear flow
+- 📝 Export any graph to plain text with one right-click
 - 📦 Zero runtime dependencies — pure C# data layer
 
 ---
@@ -130,7 +131,7 @@ void Update()
 
 | Node | Description |
 |---|---|
-| **ChoiceContext** | Presents a list of choices to the player. Fires `OnChoice`. |
+| **ChoiceContext** | Presents a list of choices to the player. Fires `OnChoice`. Optionally embed a **Speaker**, **Prompt** text, and **Metadata** directly on the node — or leave them empty and wire a `NarrativeLine` before it instead. |
 | **ConditionalBoolChoice** | A choice that only appears when a bool variable matches. |
 | **ConditionalIntChoice** | A choice that only appears when an int variable matches a condition. |
 | **ConditionalFloatChoice** | A choice that only appears when a float variable matches a condition. |
@@ -276,6 +277,35 @@ IReadOnlyCollection<string> visited   = runner.VisitedNodes;
 
 ---
 
+## 📝 Export as Plain Text
+
+Right-click any `.narrativegraph` asset in the Project window and choose **Export Narrative As Text**.
+
+A `.txt` file is saved next to the asset and highlighted automatically. The output is a human-readable script that mirrors the graph flow:
+
+```
+=== MyGraph ===
+
+[Alice]: What will you do?
+> CHOICE
+  [1] Fight
+        [Alice]: Brave choice.
+        === END ===
+  [2] Run
+        [Alice]: Live to fight another day.
+        === END ===
+```
+
+All node types are supported — conditionals, set-variable, events, jumps, random branches, and cycle detection (`↑ loops back to [label]`).
+
+You can also call it from code:
+
+```csharp
+string script = NarrativeGraphTextExporter.Convert(myGraphData);
+```
+
+---
+
 ## 🎨 Custom Line Metadata
 
 Attach game-specific data to any narrative line (emotion, portrait, audio clip, etc.) by extending `NarrativeLineMetadata`:
@@ -322,7 +352,7 @@ The package includes a ready-to-use example in `Samples/`:
 
 ```
 NarrativeGraphTool/
-├── Editor/          # Graph editor nodes, parser, asset importer
+├── Editor/          # Graph editor nodes, parser, asset importer, text exporter
 ├── Runtime/         # NarrativeRunner, NarrativeGraphData, node data classes
 ├── Samples/         # SimpleNarrativeUI + EmotionLineMetadata example
 ├── Tests/           # Edit-mode unit tests (~90 tests)
