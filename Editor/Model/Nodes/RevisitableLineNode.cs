@@ -1,5 +1,5 @@
 using System;
-using NarrativeGraphTool.Runtime.Data;
+using NarrativeGraphTool.Data;
 using Unity.GraphToolkit.Editor;
 
 namespace NarrativeGraphTool.Editor.Model.Nodes
@@ -8,7 +8,7 @@ namespace NarrativeGraphTool.Editor.Model.Nodes
     /// A narrative line with two text variants: one shown on the player's first visit,
     /// another shown on every subsequent visit to this node.
     /// <para>
-    /// Visited state is tracked automatically by <see cref="NarrativeGraphTool.Runtime.NarrativeRunner"/>
+    /// Visited state is tracked automatically by <see cref="NarrativeGraphTool.NarrativeRunner"/>
     /// — no variables or conditionals needed.
     /// </para>
     /// </summary>

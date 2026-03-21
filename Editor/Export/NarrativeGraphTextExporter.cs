@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using NarrativeGraphTool.Runtime.Data;
+using NarrativeGraphTool.Data;
 using UnityEditor;
 using UnityEngine;
 

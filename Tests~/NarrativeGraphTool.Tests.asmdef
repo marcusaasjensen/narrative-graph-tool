@@ -2,7 +2,7 @@
     "name": "NarrativeGraphTool.Tests",
     "rootNamespace": "",
     "references": [
-        "NarrativeGraphTool",
+        "NarrativeGraphTool.Runtime",
         "NarrativeGraphTool.Editor",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner"

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace NarrativeGraphTool.Runtime.Data
+namespace NarrativeGraphTool.Data
 {
     // ─────────────────────────────────────────────────────────────────────────────
     // Base

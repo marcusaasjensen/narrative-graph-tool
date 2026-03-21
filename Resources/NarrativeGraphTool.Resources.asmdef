@@ -2,7 +2,7 @@
     "name": "NarrativeGraphTool.Resources",
     "rootNamespace": "",
     "references": [
-        "NarrativeGraphTool"
+        "NarrativeGraphTool.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

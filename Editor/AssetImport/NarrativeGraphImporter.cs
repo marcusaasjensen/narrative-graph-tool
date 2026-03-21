@@ -9,7 +9,7 @@ namespace NarrativeGraphTool.Editor.AssetImport
 {
     /// <summary>
     /// Imports .narrativegraph assets so Unity recognizes them and the Graph Toolkit can open them.
-    /// Also parses the graph into a <see cref="NarrativeGraphTool.Runtime.Data.NarrativeGraphData"/>
+    /// Also parses the graph into a <see cref="NarrativeGraphTool.Data.NarrativeGraphData"/>
     /// sub-asset, which can be assigned directly to a NarrativeRunner by dragging the
     /// .narrativegraph file onto the field.
     /// </summary>

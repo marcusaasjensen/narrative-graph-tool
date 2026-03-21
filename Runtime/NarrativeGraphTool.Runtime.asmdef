@@ -1,5 +1,5 @@
 {
-    "name": "NarrativeGraphTool",
+    "name": "NarrativeGraphTool.Runtime",
     "rootNamespace": "",
     "references": [],
     "includePlatforms": [],

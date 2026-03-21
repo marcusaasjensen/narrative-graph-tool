@@ -1,7 +1,7 @@
 {
     "name": "NarrativeGraphTool.Samples",
     "rootNamespace": "NarrativeGraphTool.Samnples",
-    "references": ["NarrativeGraphTool"],
+    "references": ["NarrativeGraphTool.Runtime"],
     "autoReferenced": true,
     "allowUnsafeCode": false
 }

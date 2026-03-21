@@ -1,5 +1,5 @@
 using System;
-using NarrativeGraphTool.Runtime.Data;
+using NarrativeGraphTool.Data;
 using Unity.GraphToolkit.Editor;
 
 namespace NarrativeGraphTool.Editor.Model.Nodes

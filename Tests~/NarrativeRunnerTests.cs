@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using NarrativeGraphTool.Runtime;
-using NarrativeGraphTool.Runtime.Data;
+using NarrativeGraphTool;
+using NarrativeGraphTool.Data;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;

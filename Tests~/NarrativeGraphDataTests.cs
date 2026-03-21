@@ -1,4 +1,4 @@
-using NarrativeGraphTool.Runtime.Data;
+using NarrativeGraphTool.Data;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;

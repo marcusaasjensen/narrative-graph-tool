@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NarrativeGraphTool.Runtime.Data;
+using NarrativeGraphTool.Data;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace NarrativeGraphTool.Runtime
+namespace NarrativeGraphTool
 {
     /// <summary>
     /// Runtime executor for a <see cref="NarrativeGraphData"/> asset.

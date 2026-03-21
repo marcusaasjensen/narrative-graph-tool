@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace NarrativeGraphTool.Runtime.Data
+namespace NarrativeGraphTool.Data
 {
     /// <summary>
     /// Self-contained, runtime-safe snapshot of a NarrativeGraph asset.

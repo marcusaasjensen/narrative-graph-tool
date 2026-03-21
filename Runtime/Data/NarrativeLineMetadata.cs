@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NarrativeGraphTool.Runtime.Data
+namespace NarrativeGraphTool.Data
 {
     /// <summary>
     /// Abstract base for all game-specific narrative line metadata assets.
