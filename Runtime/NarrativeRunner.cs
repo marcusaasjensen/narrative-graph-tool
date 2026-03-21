@@ -118,15 +118,6 @@ namespace NarrativeGraphTool
         /// </summary>
         public Action<string, object> VariableSetter { get; set; }
 
-        /// <summary>
-        /// Optional gate that blocks <see cref="Continue"/> from advancing the narrative.
-        /// Set this to a function that returns <c>false</c> while a typewriter or line
-        /// animation is still playing, and <c>true</c> once the player is allowed to advance.
-        /// When null, <see cref="Continue"/> always advances immediately.
-        /// <para>Example: <c>runner.ContinueGate = () => !myTypewriter.IsPlaying;</c></para>
-        /// </summary>
-        public Func<bool> ContinueGate { get; set; }
-
         // ─── Events ───────────────────────────────────────────────────────────────
 
         /// <summary>
@@ -232,8 +223,6 @@ namespace NarrativeGraphTool
                 Debug.LogWarning("[NarrativeRunner] Continue() called while awaiting a choice. Use SelectChoice() instead.", this);
                 return;
             }
-
-            if (ContinueGate != null && !ContinueGate()) return;
 
             if (_current == null) return;
 
