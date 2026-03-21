@@ -51,11 +51,6 @@ public class SimpleNarrativeUI : MonoBehaviour
     // ── Active choices (stored so keyboard input can select them) ─────────────
     ChoiceNodeData _pendingChoices;
 
-    // ── Typewriter gate ───────────────────────────────────────────────────────
-    // Set _isLineComplete = false when a line starts animating, true when done.
-    // The runner will refuse to advance until this is true.
-    bool _isLineComplete = true;
-
     // ─────────────────────────────────────────────────────────────────────────
 
     void Start()
@@ -71,11 +66,7 @@ public class SimpleNarrativeUI : MonoBehaviour
         runner.VariableProvider = key =>
             _gameVariables.TryGetValue(key, out var val) ? val : null;
 
-        // 2. Block Continue() while a line is still animating.
-        //    Replace _isLineComplete with your typewriter's IsComplete flag.
-        runner.ContinueGate = () => _isLineComplete;
-
-        // 3. Subscribe to runner events.
+        // 2. Subscribe to runner events.
         runner.OnLine   += HandleLine;
         runner.OnBlock  += HandleBlock;
         runner.OnChoice += HandleChoice;
@@ -132,15 +123,10 @@ public class SimpleNarrativeUI : MonoBehaviour
         var prefix = string.IsNullOrEmpty(line.speaker) ? "" : $"[{line.speaker}] ";
         Debug.Log($"{prefix}{line.text}  (Press Space to continue)");
 
-        // Mark as complete immediately (no typewriter in this sample).
-        // With a real typewriter, set _isLineComplete = false here and
-        // set it back to true in your typewriter's OnComplete callback.
-        _isLineComplete = true;
-
-        // Example with TextMeshPro + typewriter (uncomment and assign fields):
-        // _isLineComplete = false;
+        // Example with TextMeshPro (uncomment and assign fields):
         // speakerLabel.text = line.speaker;
-        // myTypewriter.Play(line.text, onComplete: () => _isLineComplete = true);
+        // textLabel.text    = line.text;
+        // continueHint.SetActive(true);
     }
 
     /// <summary>A block of sequential lines arrived. Show each line in your UI.</summary>
