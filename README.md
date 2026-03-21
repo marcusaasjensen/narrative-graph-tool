@@ -66,6 +66,8 @@ Add a **NarrativeRunner** component to a GameObject, drag your `.narrativegraph`
 ### 5. Subscribe to events and drive your UI
 
 ```csharp
+using NarrativeGraphTool;
+
 [SerializeField] NarrativeRunner runner;
 
 void Start()
@@ -187,6 +189,9 @@ Modify a variable as the narrative flows through. Execution continues automatica
 Subscribe from code for full typed access to node data:
 
 ```csharp
+using NarrativeGraphTool;
+using NarrativeGraphTool.Data;
+
 // A single narrative line is ready to display
 runner.OnLine += (NarrativeLineData line) => { };
 
@@ -264,6 +269,8 @@ runner.VariableSetter = (string id, object value) => myVariables[id] = value;
 ### State
 
 ```csharp
+using NarrativeGraphTool.Data;
+
 bool running                          = runner.IsRunning;
 NarrativeNodeData current             = runner.CurrentNode;
 IReadOnlyCollection<string> visited   = runner.VisitedNodes;
@@ -305,6 +312,8 @@ string script = NarrativeGraphTextExporter.Convert(myGraphData);
 Attach game-specific data to any narrative line (emotion, portrait, audio clip, etc.) by extending `NarrativeLineMetadata`:
 
 ```csharp
+using NarrativeGraphTool.Data;
+
 [CreateAssetMenu(menuName = "Narrative Graph > My Line Metadata")]
 public class MyLineMetadata : NarrativeLineMetadata
 {
