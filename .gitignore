@@ -11,5 +11,6 @@ Thumbs.db
 *.csproj
 *.sln
 
-# Editor backup files
+# Editor backup files (but not the Tests~ folder)
 *~
+!Tests~/

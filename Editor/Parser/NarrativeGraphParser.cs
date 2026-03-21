@@ -283,7 +283,7 @@ namespace NarrativeGraphTool.Editor.Parser
         {
             var lines = new List<NarrativeLine>();
 
-            foreach (var block in ctx.blockNodes.OfType<LineBlock>())
+            foreach (var block in ctx.BlockNodes.OfType<LineBlock>())
             {
                 block.GetInputPortByName(LineBlock.SpeakerName).TryGetValue<string>(out var s);
                 block.GetNodeOptionByName(LineBlock.LineText).TryGetValue<string>(out var t);
@@ -304,7 +304,7 @@ namespace NarrativeGraphTool.Editor.Parser
         {
             var options = new List<ChoiceOption>();
 
-            foreach (var block in ctx.blockNodes)
+            foreach (var block in ctx.BlockNodes)
             {
                 switch (block)
                 {
@@ -408,7 +408,7 @@ namespace NarrativeGraphTool.Editor.Parser
         {
             var branchIds = new List<string>();
 
-            foreach (var block in ctx.blockNodes.OfType<RandomBranchBlock>())
+            foreach (var block in ctx.BlockNodes.OfType<RandomBranchBlock>())
             {
                 var nextId = ResolveOutput(block, RandomBranchBlock.PortOutput, ids);
                 if (nextId != null)
@@ -427,9 +427,9 @@ namespace NarrativeGraphTool.Editor.Parser
             try { outputPort = node.GetOutputPortByName(portName); }
             catch { return null; }
 
-            if (outputPort == null || !outputPort.isConnected) return null;
+            if (outputPort == null || !outputPort.IsConnected) return null;
 
-            var connectedINode = outputPort.firstConnectedPort?.GetNode();
+            var connectedINode = outputPort.FirstConnectedPort?.GetNode();
             return connectedINode != null && ids.TryGetValue(connectedINode, out var nextId) ? nextId : null;
         }
 

@@ -4,7 +4,7 @@
   <img src="Editor/Icons/narrative-graph-icon.png" width="96" alt="Narrative Graph Tool icon"/>
 </p>
 
-A **node-based narrative editor** for Unity built on [Graph Toolkit 0.4.0-exp.2](https://docs.unity3d.com/Packages/com.unity.graphtoolkit@0.4/manual/index.html).
+A **node-based narrative editor** for Unity 6.4+ built on the Graph Toolkit.
 Design branching stories, dialogue, and interactive narratives visually — then play them back at runtime with a simple event-driven API.
 
 ---
@@ -28,36 +28,20 @@ Design branching stories, dialogue, and interactive narratives visually — then
 
 | Requirement | Version |
 |---|---|
-| Unity | 6.0+ |
-| [Graph Toolkit](https://docs.unity3d.com/Packages/com.unity.graphtoolkit@0.4/manual/index.html) | 0.4.0-exp.2 |
-
-> ⚠️ Graph Toolkit is an **experimental** Unity package. You must add it manually before installing this package.
+| Unity | 6.4+ |
+| Graph Toolkit | Built-in (Unity 6.4) |
 
 ---
 
 ## 📦 Installation
-
-### 1. Add Graph Toolkit
-
-> ⚠️ UPM does **not** auto-install dependencies from git URL packages — you must add Graph Toolkit manually before step 2, or you will get compile errors.
-
-Open `Packages/manifest.json` and add the dependency:
-
-```json
-{
-  "dependencies": {
-    "com.unity.graphtoolkit": "0.4.0-exp.2"
-  }
-}
-```
-
-### 2. Add Narrative Graph Tool via Package Manager
 
 Go to **Window → Package Manager → + → Add package from git URL** and paste:
 
 ```
 https://github.com/marcusaasjensen/narrative-graph-tool.git
 ```
+
+> Graph Toolkit is built into Unity 6.4 — no extra steps needed.
 
 ---
 
