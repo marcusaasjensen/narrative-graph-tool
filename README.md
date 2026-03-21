@@ -242,11 +242,21 @@ Every C# event has an Inspector-wirable **UnityEvent** equivalent, visible under
 ### Controlling flow
 
 ```csharp
-runner.StartNarrative();          // Begin from StartNode
-runner.Continue();                // Advance past a line or block
-runner.SelectChoice(index);       // Choose an option (0-based, filtered index)
-runner.SetGraphData(data);        // Swap graph data at runtime
-runner.ResetVisitedNodes();       // Clear visit history
+runner.StartNarrative();              // Begin from StartNode
+runner.StartNarrative(savedNodeId);   // Resume from a saved node
+runner.Continue();                    // Advance past a line or block
+runner.SelectChoice(index);           // Choose an option (0-based, filtered index)
+runner.SetGraphData(data);            // Swap graph data at runtime
+runner.ResetVisitedNodes();           // Clear visit history
+```
+
+**Save & restore example:**
+```csharp
+// Save — store the current node ID anywhere (PlayerPrefs, JSON, ScriptableObject…)
+string savedNodeId = runner.CurrentNode.id;
+
+// Restore — resume exactly where the player left off
+runner.StartNarrative(savedNodeId);
 ```
 
 ---

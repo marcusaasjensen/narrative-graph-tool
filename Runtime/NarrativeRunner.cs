@@ -164,20 +164,46 @@ namespace NarrativeGraphTool.Runtime
                 return;
             }
 
-            IsRunning = true;
-            _awaitingChoice = false;
-            _visibleOptions = null;
-            _current = null;
-
             var startNode = _graphData.GetNode(_graphData.startNodeId) as StartNodeData;
             if (startNode == null)
             {
                 Debug.LogError("[NarrativeRunner] StartNodeData not found in graph data.", this);
-                Finish();
                 return;
             }
 
+            BeginSession();
             Step(startNode.nextId);
+        }
+
+        /// <summary>
+        /// Resumes the narrative from a previously saved node ID.
+        /// Use <see cref="CurrentNode"/>.<c>.id</c> to get the node ID to save,
+        /// then pass it here when loading.
+        /// </summary>
+        /// <example>
+        /// // Saving:
+        /// string savedNodeId = runner.CurrentNode.id;
+        ///
+        /// // Restoring:
+        /// runner.StartNarrative(savedNodeId);
+        /// </example>
+        /// <param name="fromNodeId">ID of the node to resume from.</param>
+        public void StartNarrative(string fromNodeId)
+        {
+            if (_graphData == null)
+            {
+                Debug.LogError("[NarrativeRunner] No NarrativeGraphData assigned.", this);
+                return;
+            }
+
+            if (_graphData.GetNode(fromNodeId) == null)
+            {
+                Debug.LogError($"[NarrativeRunner] Cannot resume — node '{fromNodeId}' not found in graph data.", this);
+                return;
+            }
+
+            BeginSession();
+            Step(fromNodeId);
         }
 
         /// <summary>
@@ -233,6 +259,16 @@ namespace NarrativeGraphTool.Runtime
             _awaitingChoice = false;
             _onNodeExit.Invoke(_current);
             Step(_visibleOptions[index].nextId);
+        }
+
+        // ─── Internal helpers ─────────────────────────────────────────────────────
+
+        void BeginSession()
+        {
+            IsRunning       = true;
+            _awaitingChoice = false;
+            _visibleOptions = null;
+            _current        = null;
         }
 
         // ─── Internal step logic ──────────────────────────────────────────────────
