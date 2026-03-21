@@ -338,7 +338,7 @@ namespace NarrativeGraphTool
 
                     _awaitingChoice = true;
                     // Raise a view with only visible options so the UI doesn't need to filter.
-                    var filteredChoice = new ChoiceNodeData { id = choiceData.id, options = _visibleOptions };
+                    var filteredChoice = new ChoiceNodeData { id = choiceData.id, prompt = choiceData.prompt, options = _visibleOptions };
                     OnChoice?.Invoke(filteredChoice);
                     _onChoice.Invoke(filteredChoice);
                     break;
