@@ -4,7 +4,7 @@
     "references": [
         "Unity.GraphToolkit.Editor",
         "Unity.GraphToolkit.Common.Editor",
-        "NarrativeGraphTool.Runtime"
+        "NarrativeGraphTool"
     ],
     "includePlatforms": [
         "Editor"
