@@ -167,7 +167,15 @@ Modify a variable as the narrative flows through. Execution continues automatica
 
 | Node | Description |
 |---|---|
-| **Event** | Fires `OnEvent` with a name and optional string payload, then continues. Use this to trigger gameplay effects (play sound, unlock item, etc.) without breaking narrative flow. |
+| **Event** | Fires `OnEvent` with a name and optional string payload. By default auto-advances immediately. Enable **Wait For Resume** to stop the runner until `Resume()` is called — use this for animations, cutscenes, or any async effect that must finish before the narrative continues. |
+
+---
+
+### ⏸️ Pause
+
+| Node | Description |
+|---|---|
+| **Pause** | Suspends the narrative without ending it. Fires `OnPause`. Call `Resume()` to continue from the connected output node. Use this to exit a dialogue mid-scene and re-enter exactly where you left off. |
 
 ---
 
@@ -206,6 +214,9 @@ runner.OnEvent += (EventNodeData ev) => { };
 
 // The narrative has ended
 runner.OnEnd += () => { };
+
+// A PauseNode was reached — runner stopped, waiting for Resume()
+runner.OnPause += () => { };
 ```
 
 ---
@@ -235,8 +246,36 @@ runner.StartNarrative();              // Begin from StartNode
 runner.StartNarrative(savedNodeId);   // Resume from a saved node
 runner.Continue();                    // Advance past a line or block
 runner.SelectChoice(index);           // Choose an option (0-based, filtered index)
+runner.Resume();                      // Continue after a PauseNode or blocking EventNode
 runner.SetGraphData(data);            // Swap graph data at runtime
 runner.ResetVisitedNodes();           // Clear visit history
+```
+
+**Blocking event example** (animation, cutscene, close UI):
+
+```csharp
+runner.OnEvent += ev =>
+{
+    switch (ev.eventName)
+    {
+        case "PlayCutscene":
+            // ev.waitForResume is true — must call Resume() when done
+            StartCoroutine(PlayCutsceneAndResume());
+            break;
+
+        case "PlaySound":
+            // ev.waitForResume is false — runner already advanced
+            audioSource.Play();
+            break;
+    }
+};
+
+IEnumerator PlayCutsceneAndResume()
+{
+    animator.Play("cutscene");
+    yield return new WaitUntil(() => animator.IsInTransition(0) == false);
+    runner.Resume();
+}
 ```
 
 **Save & restore example:**

@@ -65,10 +65,14 @@ namespace NarrativeGraphTool
         [Tooltip("Raised when execution exits any node. Supports dynamic NarrativeNodeData parameter or no parameter.")]
         [SerializeField] UnityEvent<NarrativeNodeData> _onNodeExit;
 
+        [Tooltip("Raised when a PauseNode is reached. Call Resume() to continue from where the narrative stopped.")]
+        [SerializeField] UnityEvent _onPause;
+
         // ─── State ────────────────────────────────────────────────────────────────
 
         NarrativeNodeData _current;
         bool _awaitingChoice;
+        string _resumeNodeId;
 
         /// <summary>
         /// Filtered list of visible choices for the current choice node.
@@ -94,6 +98,13 @@ namespace NarrativeGraphTool
 
         /// <summary>Returns true if the node with the given ID has been reached at least once.</summary>
         public bool IsVisited(string nodeId) => _visitedNodes.Contains(nodeId);
+
+        /// <summary>
+        /// The node ID stored by the last PauseNode reached.
+        /// Pass this to <see cref="StartNarrative(string)"/> to persist a pause point across sessions.
+        /// Null if no PauseNode has been reached yet.
+        /// </summary>
+        public string ResumeNodeId => _resumeNodeId;
 
         /// <summary>
         /// Clears all visited-node records.
@@ -146,6 +157,13 @@ namespace NarrativeGraphTool
 
         /// <summary>Raised when an EndNode is reached or the graph runs out of nodes.</summary>
         public event Action OnEnd;
+
+        /// <summary>
+        /// Raised when a PauseNode is reached. The runner stops without ending.
+        /// Call <see cref="Resume"/> to continue, or save <see cref="ResumeNodeId"/> and
+        /// call <see cref="StartNarrative(string)"/> later to restore across sessions.
+        /// </summary>
+        public event Action OnPause;
 
         // ─── Public API ───────────────────────────────────────────────────────────
 
@@ -204,6 +222,28 @@ namespace NarrativeGraphTool
 
             BeginSession();
             Step(fromNodeId);
+        }
+
+        /// <summary>
+        /// Continues the narrative from the point stored by the last <see cref="PauseNodeData"/>.
+        /// Equivalent to calling <see cref="StartNarrative(string)"/> with <see cref="ResumeNodeId"/>.
+        /// </summary>
+        public void Resume()
+        {
+            if (_resumeNodeId == null)
+            {
+                Debug.LogWarning("[NarrativeRunner] Resume() called but no pause point is stored.", this);
+                return;
+            }
+
+            if (_graphData == null)
+            {
+                Debug.LogError("[NarrativeRunner] No NarrativeGraphData assigned.", this);
+                return;
+            }
+
+            BeginSession();
+            Step(_resumeNodeId);
         }
 
         /// <summary>
@@ -366,7 +406,15 @@ namespace NarrativeGraphTool
                     OnEvent?.Invoke(ev);
                     _onEvent.Invoke(ev);
                     _onNodeExit.Invoke(node);
-                    Step(ev.nextId);
+                    if (ev.waitForResume)
+                    {
+                        _resumeNodeId = ev.nextId;
+                        IsRunning     = false;
+                    }
+                    else
+                    {
+                        Step(ev.nextId);
+                    }
                     break;
 
                 case JumpNodeData jump:
@@ -391,6 +439,14 @@ namespace NarrativeGraphTool
                 case ConditionalNodeData conditional:
                     _onNodeExit.Invoke(node);
                     Step(EvaluateConditional(conditional) ? conditional.trueId : conditional.falseId);
+                    break;
+
+                case PauseNodeData pause:
+                    _resumeNodeId = pause.nextId;
+                    IsRunning = false;
+                    _onNodeExit.Invoke(node);
+                    OnPause?.Invoke();
+                    _onPause.Invoke();
                     break;
 
                 case EndNodeData:
@@ -577,10 +633,11 @@ namespace NarrativeGraphTool
 
         void Finish()
         {
-            IsRunning = false;
+            IsRunning       = false;
             _awaitingChoice = false;
             _visibleOptions = null;
-            _current = null;
+            _current        = null;
+            _resumeNodeId   = null;
             OnEnd?.Invoke();
             _onNarrativeEnd.Invoke();
         }

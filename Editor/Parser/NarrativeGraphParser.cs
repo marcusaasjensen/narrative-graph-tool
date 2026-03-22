@@ -119,6 +119,13 @@ namespace NarrativeGraphTool.Editor.Parser
                 case EndNode:
                     return new EndNodeData { id = id };
 
+                case PauseNode pause:
+                    return new PauseNodeData
+                    {
+                        id     = id,
+                        nextId = ResolveFlowOutput(pause, NarrativeNodeBase.ExecutionPortName, ids),
+                    };
+
                 case RevisitableLineNode revLine:
                     revLine.GetInputPortByName(RevisitableLineNode.PortSpeaker).TryGetValue<string>(out var revSpeaker);
                     revLine.GetNodeOptionByName(RevisitableLineNode.OptionFirstText).TryGetValue<string>(out var firstText);
@@ -159,12 +166,14 @@ namespace NarrativeGraphTool.Editor.Parser
                 case EventNode ev:
                     ev.GetNodeOptionByName(EventNode.OptionEventName).TryGetValue<string>(out var evName);
                     ev.GetNodeOptionByName(EventNode.OptionPayload).TryGetValue<string>(out var payload);
+                    ev.GetNodeOptionByName(EventNode.OptionWaitForResume).TryGetValue<bool>(out var waitForResume);
                     return new EventNodeData
                     {
-                        id        = id,
-                        eventName = evName  ?? "",
-                        payload   = payload ?? "",
-                        nextId    = ResolveFlowOutput(ev, NarrativeNodeBase.ExecutionPortName, ids),
+                        id            = id,
+                        eventName     = evName  ?? "",
+                        payload       = payload ?? "",
+                        waitForResume = waitForResume,
+                        nextId        = ResolveFlowOutput(ev, NarrativeNodeBase.ExecutionPortName, ids),
                     };
 
                 case SetVariableBoolNode setBool:

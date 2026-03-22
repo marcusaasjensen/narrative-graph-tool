@@ -56,6 +56,12 @@ namespace NarrativeGraphTool.Tests
         internal static EventNodeData Event(string id, string eventName, string payload, string nextId)
             => new() { id = id, eventName = eventName, payload = payload, nextId = nextId };
 
+        internal static EventNodeData BlockingEvent(string id, string eventName, string nextId, string payload = "")
+            => new() { id = id, eventName = eventName, payload = payload, nextId = nextId, waitForResume = true };
+
+        internal static PauseNodeData Pause(string id, string nextId)
+            => new() { id = id, nextId = nextId };
+
         // ─── Choice factories ─────────────────────────────────────────────────────
 
         internal static ChoiceNodeData Choice(string id, params ChoiceOption[] options)

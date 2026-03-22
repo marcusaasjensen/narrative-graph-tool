@@ -175,6 +175,23 @@ namespace NarrativeGraphTool.Data
     }
 
     // ─────────────────────────────────────────────────────────────────────────────
+    // Pause node
+    // ─────────────────────────────────────────────────────────────────────────────
+
+    /// <summary>
+    /// Suspends narrative execution without ending it.
+    /// The runner stops and fires <c>OnPause</c>. Call <c>NarrativeRunner.Resume()</c>
+    /// to continue from the node connected after this one.
+    /// Use this to exit a dialogue mid-scene and re-enter exactly where you left off.
+    /// </summary>
+    [Serializable]
+    public class PauseNodeData : NarrativeNodeData
+    {
+        /// <summary>ID of the node to step to when Resume() is called.</summary>
+        public string nextId;
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────────
     // Random branch node
     // ─────────────────────────────────────────────────────────────────────────────
 
@@ -289,6 +306,15 @@ namespace NarrativeGraphTool.Data
 
         /// <summary>ID of the next node after the event fires.</summary>
         public string nextId;
+
+        /// <summary>
+        /// When true, the runner stops after firing <c>OnEvent</c> and waits for
+        /// <see cref="NarrativeRunner.Resume"/> to be called before advancing.
+        /// Use this for animations, cutscenes, or any async effect that must
+        /// complete before the narrative continues.
+        /// When false (default), the runner auto-advances immediately after firing.
+        /// </summary>
+        public bool waitForResume;
     }
 
     // ─────────────────────────────────────────────────────────────────────────────

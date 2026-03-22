@@ -97,6 +97,11 @@ namespace NarrativeGraphTool.Editor.Export
                     sb.AppendLine(indent + "=== END ===");
                     break;
 
+                case PauseNodeData pause:
+                    sb.AppendLine(indent + "--- PAUSE ---");
+                    WriteNode(data.GetNode(pause.nextId), data, sb, indent, visited);
+                    break;
+
                 // ── Lines ─────────────────────────────────────────────────────────
 
                 case NarrativeLineData line:
@@ -204,7 +209,8 @@ namespace NarrativeGraphTool.Editor.Export
 
                 case EventNodeData ev:
                     var payloadStr = string.IsNullOrEmpty(ev.payload) ? "" : $" \"{ev.payload}\"";
-                    sb.AppendLine(indent + $"EVENT: {ev.eventName}{payloadStr}");
+                    var evPrefix   = ev.waitForResume ? "EVENT (blocking): " : "EVENT: ";
+                    sb.AppendLine(indent + $"{evPrefix}{ev.eventName}{payloadStr}");
                     WriteNode(data.GetNode(ev.nextId), data, sb, indent, visited);
                     break;
 

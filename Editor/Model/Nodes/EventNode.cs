@@ -27,8 +27,9 @@ namespace NarrativeGraphTool.Editor.Model.Nodes
     [Serializable]
     public class EventNode : NarrativeNodeBase
     {
-        public const string OptionEventName = "EventName";
-        public const string OptionPayload   = "Payload";
+        public const string OptionEventName     = "EventName";
+        public const string OptionPayload       = "Payload";
+        public const string OptionWaitForResume = "WaitForResume";
 
         protected override void OnDefineOptions(IOptionDefinitionContext context)
         {
@@ -43,6 +44,11 @@ namespace NarrativeGraphTool.Editor.Model.Nodes
                 .WithDefaultValue(string.Empty)
                 .WithTooltip("Optional data string passed along with the event (e.g. an item ID, clip name, or flag).")
                 .Delayed();
+
+            context.AddOption<bool>(OptionWaitForResume)
+                .WithDisplayName("Wait For Resume")
+                .WithDefaultValue(false)
+                .WithTooltip("When enabled, the runner stops after firing the event and waits for Resume() to be called. Use for animations or cutscenes that must finish before the narrative continues.");
         }
 
         protected override void OnDefinePorts(IPortDefinitionContext context)
