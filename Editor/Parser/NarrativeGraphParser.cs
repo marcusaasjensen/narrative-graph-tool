@@ -166,7 +166,7 @@ namespace NarrativeGraphTool.Editor.Parser
                 case EventNode ev:
                     ev.GetNodeOptionByName(EventNode.OptionEventName).TryGetValue<string>(out var evName);
                     ev.GetNodeOptionByName(EventNode.OptionPayload).TryGetValue<string>(out var payload);
-                    ev.GetNodeOptionByName(EventNode.OptionWaitForResume).TryGetValue<bool>(out var waitForResume);
+                    ev.GetInputPortByName(EventNode.PortWaitForResume).TryGetValue<bool>(out var waitForResume);
                     return new EventNodeData
                     {
                         id            = id,
