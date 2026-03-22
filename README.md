@@ -384,7 +384,6 @@ The package includes a ready-to-use example in `Samples/`:
 | File | Description |
 |---|---|
 | `SimpleNarrativeUI.cs` | Minimal console-based runner showing the full API (input, choices, events, variables) |
-| `EmotionLineMetadata.cs` | Example metadata with emotion enum, portrait sprite, and voice clip |
 
 > 🕹️ **SimpleNarrativeUI** controls: **Space** to advance, **1–4** keys to select choices.
 
@@ -396,7 +395,7 @@ The package includes a ready-to-use example in `Samples/`:
 NarrativeGraphTool/
 ├── Editor/          # Graph editor nodes, parser, asset importer, text exporter
 ├── Runtime/         # NarrativeRunner, NarrativeGraphData, node data classes
-├── Samples/         # SimpleNarrativeUI + EmotionLineMetadata example
+├── Samples/         # SimpleNarrativeUI example
 ├── Tests/           # Edit-mode unit tests (~90 tests)
 └── Resources/       # Package icons
 ```
