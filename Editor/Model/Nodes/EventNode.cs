@@ -37,13 +37,13 @@ namespace NarrativeGraphTool.Editor.Model.Nodes
                 .WithDisplayName("Event")
                 .WithDefaultValue(string.Empty)
                 .WithTooltip("Name of the event to fire. Subscribe to this name in your runtime dispatcher.")
-                .Delayed();
+                .Build();
 
             context.AddOption<string>(OptionPayload)
                 .WithDisplayName("Payload")
                 .WithDefaultValue(string.Empty)
                 .WithTooltip("Optional data string passed along with the event (e.g. an item ID, clip name, or flag).")
-                .Delayed();
+                .Build();
         }
 
         protected override void OnDefinePorts(IPortDefinitionContext context)
@@ -53,7 +53,6 @@ namespace NarrativeGraphTool.Editor.Model.Nodes
             context.AddInputPort<bool>(PortWaitForResume)
                 .WithDisplayName("Wait For Resume")
                 .WithDefaultValue(false)
-                .WithTooltip("When enabled, the runner stops after firing the event and waits for Resume() to be called. Use for animations or cutscenes that must finish before the narrative continues.")
                 .Build();
         }
     }
